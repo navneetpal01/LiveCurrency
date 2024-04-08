@@ -16,7 +16,7 @@ class CurrencyRepositoryImpl @Inject constructor(
             val currencyData = try {
                 currencyApi.getCurrency()
             }catch (e : Exception){
-                emit(CurrencyResult.Failure(data = null,message = "Check your Connection"))
+                emit(CurrencyResult.Failure(message = "Check your Connection"))
                 return@flow
             }
             emit(CurrencyResult.Success(data = currencyData))

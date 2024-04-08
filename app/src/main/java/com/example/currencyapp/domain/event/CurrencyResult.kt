@@ -5,5 +5,5 @@ sealed class CurrencyResult<T>(
     val message : String? = null
 ){
     class Success<T>(data: T) : CurrencyResult<T>(data = data)
-    class Failure<T>(data: T?,message: String) : CurrencyResult<T>(data = data,message = message)
+    class Failure<T>(message: String) : CurrencyResult<T>(message = message)
 }

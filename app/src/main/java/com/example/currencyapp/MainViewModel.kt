@@ -7,9 +7,11 @@ import com.example.currencyapp.domain.event.CurrencyResult
 import com.example.currencyapp.domain.repository.CurrencyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -24,8 +26,8 @@ class MainViewModel @Inject constructor(
     val currencyData = _currencyData.asStateFlow()
 
 
-    val channel = Channel<Boolean>()
-
+    private val _showToast = Channel<Boolean>()
+    val showToast = _showToast.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -33,7 +35,8 @@ class MainViewModel @Inject constructor(
                 currencyRepository.getLiveCurrency().collectLatest { currencyResult ->
                     when (currencyResult) {
                         is CurrencyResult.Failure -> {
-                            channel.send(true)
+                            _showToast.send(true)
+                            delay(5000)
                         }
                         is CurrencyResult.Success -> {
                             currencyResult.data?.let { currency ->
