@@ -1,7 +1,6 @@
 package com.example.currencyapp
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
@@ -19,15 +18,15 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import kotlin.math.log
 
 
 @SuppressLint("MissingPermission")
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val currencyRepository: CurrencyRepository,
-    private val notificationCompatBuilder : NotificationCompat.Builder,
+    private val notificationCompatBuilder: NotificationCompat.Builder,
     private val notificationManagerCompat: NotificationManagerCompat
 ) : ViewModel() {
     private val _currencyData: MutableStateFlow<Currency?> = MutableStateFlow(null)
@@ -46,6 +45,7 @@ class MainViewModel @Inject constructor(
                             _showToast.send(true)
                             delay(5000)
                         }
+
                         is CurrencyResult.Success -> {
                             currencyResult.data?.let { currency ->
                                 _currencyData.update {
